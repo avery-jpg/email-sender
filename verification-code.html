@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Code Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Email Verification</h1>
+        
+        <div id="requestSection">
+            <h2>Request Verification Code</h2>
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <button id="requestCodeButton">Send Verification Code</button>
+        </div>
+
+        <div id="verifySection" style="display: none;">
+            <h2>Verify Code</h2>
+            <div class="form-group">
+                <label for="verificationCode">Verification Code:</label>
+                <input type="text" id="verificationCode" placeholder="Enter the code" required>
+            </div>
+            <button id="verifyButton">Verify Code</button>
+        </div>
+    </div>
+
+    <!-- Include EmailJS SDK -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    
+    <script>
+        emailjs.init("HMCA_wcrV8yw4Hm7-"); // Replace with your EmailJS User ID
+
+        let verificationCode = '';
+
+        // Function to request verification code
+        function requestVerificationCode() {
+            const email = document.getElementById('email').value;
+            if (email) {
+                verificationCode = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit code
+
+                emailjs.send('service_6tfikyx', 'template_z4hqg29', {
+                    to_email: email,
+                    code: verificationCode
+                })
+                .then(function(response) {
+                    alert('Verification code sent to your email!');
+                    document.getElementById('requestSection').style.display = 'none';
+                    document.getElementById('verifySection').style.display = 'block';
+                }, function(error) {
+                    alert('Failed to send verification code. Error: ' + JSON.stringify(error));
+                });
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        }
+
+        // Function to verify code
+        function verifyCode() {
+            const enteredCode = document.getElementById('verificationCode').value;
+            if (enteredCode === verificationCode) {
+                alert('Email verified successfully!');
+            } else {
+                alert('Invalid verification code. Please try again.');
+            }
+        }
+
+        // Attach event listeners
+        document.getElementById('requestCodeButton').addEventListener('click', requestVerificationCode);
+        document.getElementById('verifyButton').addEventListener('click', verifyCode);
+    </script>
+</body>
+</html>
