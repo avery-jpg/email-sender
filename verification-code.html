@@ -61,7 +61,8 @@
 
                 emailjs.send('service_93qnw0y', 'verif_code_xplormc', {
                     to_name: email,
-                    verification_code: verificationCode
+                    verification_code: verificationCode,
+                    reply_to: "xplormc+verification@gmail.com",
                 })
                 .then(function(response) {
                     alert('Verification code sent to your email!');
